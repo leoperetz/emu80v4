@@ -60,7 +60,9 @@ bool palSdlInit()
     // SDL 2.0.5 windows issue
     // https://forums.libsdl.org/viewtopic.php?p=52273
     // https://bugzilla.libsdl.org/show_bug.cgi?id=2089
+    #ifdef __WIN32__
     SDL_SetHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1");
+    #endif // WIN32
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         return false;
@@ -496,8 +498,10 @@ static bool palProcessEvents()
                     emuSysReq(PalWindow::windowById(event.window.windowID), SR_CLOSE);
                 break;
             case SDL_DROPFILE:
+                #ifdef __WIN32__
                 if (SDL_GetWindowFromID(event.drop.windowID))
                     emuDropFile(PalWindow::windowById(event.drop.windowID), event.drop.file);
+                #endif // WIN32
                 break;
         }
     }
