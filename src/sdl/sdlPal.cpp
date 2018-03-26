@@ -497,10 +497,12 @@ static bool palProcessEvents()
                 else if (event.window.event == SDL_WINDOWEVENT_CLOSE  && SDL_GetWindowFromID(event.window.windowID))
                     emuSysReq(PalWindow::windowById(event.window.windowID), SR_CLOSE);
                 break;
-            // case SDL_DROPFILE:
-            //     if (SDL_GetWindowFromID(event.drop.windowID))
-            //         emuDropFile(PalWindow::windowById(event.drop.windowID), event.drop.file);
-            //     break;
+            case SDL_DROPFILE:
+                #ifdef __WIN32__
+                if (SDL_GetWindowFromID(event.drop.windowID))
+                    emuDropFile(PalWindow::windowById(event.drop.windowID), event.drop.file);
+                #endif // WIN32
+                break;
         }
     }
 
